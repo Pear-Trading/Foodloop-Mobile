@@ -1,0 +1,46 @@
+<form role="form" ng-submit='login()'>
+    <fieldset>
+      <legend>User Details</legend>
+        <div class="form-group has-success has-feedback">
+          <label>Name</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="Enter Full Name">
+        </div>
+
+        <div class="form-group">
+           <label for="singleSelect"> Age: </label>
+    <select name="singleSelect" ng-model="data.singleSelect">
+      <option value="age10">11-20</option>
+      <option value="age21">21-30</option>
+	  <option value="age31">31-40</option>
+	  <option value="age41">41-50</option>
+	  <option value="age51">51-60</option>
+	  <option value="age61">61-70</option>
+    </select>
+        </div>
+
+        <div class="form-group">
+           <label for="singleSelect"> Gender: </label>
+    <select name="singleSelect" ng-model="data.singleSelect">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+	  <option value="Other">Other</option>
+	  <option value="None">Prefer Not To Say</option>
+    </select>
+        </div>
+		
+    </fieldset>
+    <hr>
+
+    <button class="btn btn-primary btn-block">
+      Login
+    </button>
+
+    <div ui-content-for="navbarAction">
+      <a class='btn' ng-click='login()'>Login</a>
+    </div>
+
+  </form>
+ </div>
+</div>
