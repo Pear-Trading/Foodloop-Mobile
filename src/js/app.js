@@ -1,4 +1,5 @@
-angular.module('FoodLoop', [
+"use strict";
+var app = angular.module('FoodLoop', [
   'ngRoute',
   'mobile-angular-ui',
   'FoodLoop.controllers.Main'
@@ -15,7 +16,6 @@ angular.module('FoodLoop', [
 });
 
 app.controller('MainController', function($rootScope, $scope){
-
   $scope.swiped = function(direction) {
     alert('Swiped ' + direction);
   };

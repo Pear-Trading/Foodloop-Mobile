@@ -13,6 +13,7 @@
     <script src="http://localhost:8001/target/target-script-min.js"></script>
     <script src="cordova.js"></script>
     <script src="js/app.min.js"></script>
+	<script>window.location.href = "#/receipt"</script>
   </head>
   <body ng-app="FoodLoop" ng-controller="MainController">
 
@@ -24,7 +25,7 @@
         <ui-state id='activeTab' default='1'></ui-state>
 		  <div class="btn-group justified nav-tabs">
         <a ui-set="{'activeTab': 1}" 
-            ui-class="{'active': activeTab == 1}" class="btn btn-default"href="#/receipt">Add Receipt</a>
+            ui-class="{'active': activeTab == 1}" class="btn btn-default active"href="#/receipt">Add Receipt</a>
 
         <a ui-set="{'activeTab': 2}" 
             ui-class="{'active': activeTab == 2}" class="btn btn-default"href="#/account">User Account</a>
@@ -37,7 +38,8 @@
       <!-- App Body -->
       <div class="app-body">
         <div class="app-content">
-          <ng-view></ng-view>  
+          <ng-view></ng-view>
+		  
         </div>
       </div>
 

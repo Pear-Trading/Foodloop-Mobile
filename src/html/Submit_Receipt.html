@@ -1,27 +1,8 @@
-<form role="form" ng-submit='login()'>
-    <fieldset>
-      <legend>Add a Receipt</legend>
-        <div class="form-group has-success has-feedback">
-          <label>Store Name</label>
-          <input type="text"
-                 class="form-control"
-                 placeholder="Enter Store Name (e.g. "Gregsons") ">
-        </div>
-
-        <div class="form-group">
-          <label>Enter Amount Paid</label>
-          <input type="number"
-		         ng-model="money"
-                 class="form-control"
-                 placeholder="Enter Amount in £">
-        </div>
-
-        <div class="form-group">
-	 <script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8"> // The script for picture uploading
 
     var pictureSource;   // picture source
     var destinationType; // sets the format of returned value
-
+	var currencypattern; 
     // Wait for device API libraries to load
     //
     document.addEventListener("deviceready",onDeviceReady,false);
@@ -31,6 +12,7 @@
     function onDeviceReady() {
         pictureSource = navigator.camera.PictureSourceType;
         destinationType = navigator.camera.DestinationType;
+		currencypattern = navigator.globalization.getCurrencyPattern;
     }
 
 
@@ -99,12 +81,30 @@
     }
 
     </script>
+<form role="form" ng-submit='login()'>
+    <fieldset>
+      <legend>Add a Receipt</legend>
+        <div class="form-group has-success has-feedback">
+          <label>Store Name</label>
+          <input type="text"
+                 class="form-control"
+                 placeholder="e.g. Gregsons"/>
+        </div>
+
+        <div class="form-group">
+          <label>Enter Amount Paid (£)</label><br>
+          <input type="number" name="currency" min="0" max="9999" step="0.01" size="4" 
+    title="CDA Currency Format - no pound sign and no comma(s) - pennies (.##) are optional" />
+        </div>
+
+        <div class="form-group">
+	 
         </div>
 		
 		<div class="form-group">
 			<label>Upload picture of Receipt:</label><br>
 			<button ng-click="alert('I AM A BANANA');">
-			<!--button ng-click="console.log('I AM A BANANA');getPhoto(pictureSource.PHOTOLIBRARY);"-->Select Photo:</button>
+			<!--button ng-click="getPhoto(pictureSource.PHOTOLIBRARY);"-->Select Photo:</button>
 		</div>
 		
     </fieldset>
