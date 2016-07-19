@@ -72,7 +72,78 @@ app.controller('MainController', function($rootScope, $scope){
         sourceType: source });
     }
   
-  //For drop down menu's
+      // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+
+        // Show the selected image
+        var smallImage = document.getElementById('smallImage');
+        smallImage.style.display = 'block';
+        smallImage.src = imageURI;
+    }
+	
+	// The script for picture uploading
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+	var currencypattern; 
+    // Wait for device API libraries to load
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        pictureSource = navigator.camera.PictureSourceType;
+        destinationType = navigator.camera.DestinationType;
+		currencypattern = navigator.globalization.getCurrencyPattern;
+    }
+
+    function uploadPhoto() {
+
+        //selected photo URI is in the src attribute (we set this on getPhoto)
+        var imageURI = document.getElementById('smallImage').getAttribute("src");
+        if (!imageURI) {
+            alert('Please select an image first.');
+            return;
+        }
+
+        //set upload options
+        var options = new FileUploadOptions();
+        options.fileKey = "file";
+        options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.mimeType = "image/jpeg";
+
+        options.params = {
+            firstname: document.getElementById("firstname").value,
+            lastname: document.getElementById("lastname").value,
+            workplace: document.getElementById("workplace").value
+        }
+
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI("http://some.server.com/upload.php"), win, fail, options);
+    }
+
+    // Called if something bad happens.
+    //
+    function onFail(message) {
+      console.log('Failed because: ' + message);
+    }
+
+    function win(r) {
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        //alert("Response =" + r.response);
+        console.log("Sent = " + r.bytesSent);
+    }
+
+    function fail(error) {
+        alert("An error has occurred: Code = " + error.code);
+        console.log("upload error source " + error.source);
+        console.log("upload error target " + error.target);
+    }
+  
+  //For drop down menu's in the forms
   
   angular.module('staticSelect', [])
  .controller('ExampleController', ['$scope', function($scope) {
