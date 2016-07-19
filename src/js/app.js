@@ -5,6 +5,8 @@ var app = angular.module('FoodLoop', [
   'FoodLoop.controllers.Main'
 ])
 
+// Links to the pages
+
 .config(function($routeProvider) {
   $routeProvider.when('/', {redirectTo:'/receipt',  reloadOnSearch: false});
   $routeProvider.when('/receipt', {templateUrl:'Submit_Receipt.html',  reloadOnSearch: false});
@@ -60,6 +62,8 @@ app.controller('MainController', function($rootScope, $scope){
 	$scope.data=data;
   };
   
+  // Used when submitting a token
+  
   $scope.tokenlogin = function(token) {
 	if(token.value=='apple99'){
 		alert('You\'ve logged in!');
@@ -74,30 +78,16 @@ app.controller('MainController', function($rootScope, $scope){
   // 
   $scope.notices = [];
   
-  // A button will call this function
-    //
-    $scope.getPhoto =function(source) {
-      // Retrieve image file location from specified source
-      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-        destinationType: destinationType.FILE_URI,
-        sourceType: source });
-    }
-  
-      // Called when a photo is successfully retrieved
-    //
-    function onPhotoURISuccess(imageURI) {
 
-        // Show the selected image
-        var smallImage = document.getElementById('smallImage');
-        smallImage.style.display = 'block';
-        smallImage.src = imageURI;
-    }
+	// IMAGE UPLOADING CODE
+  
+     
 	
 	// The script for picture uploading
 
     var pictureSource;   // picture source
     var destinationType; // sets the format of returned value
-	var currencypattern; 
+	var currencypattern; // used for currency in the form
     // Wait for device API libraries to load
     //
     document.addEventListener("deviceready",onDeviceReady,false);
@@ -110,6 +100,25 @@ app.controller('MainController', function($rootScope, $scope){
 		currencypattern = navigator.globalization.getCurrencyPattern;
     }
 
+	 // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+
+        // Show the selected image
+        var smallImage = document.getElementById('smallImage');
+        smallImage.style.display = 'block';
+        smallImage.src = imageURI;
+    }
+	
+	// A button will call this function
+    //
+    $scope.getPhoto =function(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+	
     function uploadPhoto() {
 
         //selected photo URI is in the src attribute (we set this on getPhoto)
@@ -126,9 +135,8 @@ app.controller('MainController', function($rootScope, $scope){
         options.mimeType = "image/jpeg";
 
         options.params = {
-            firstname: document.getElementById("firstname").value,
-            lastname: document.getElementById("lastname").value,
-            workplace: document.getElementById("workplace").value
+            firstname: document.getElementById("company").value,
+            lastname: document.getElementById("currency").value,
         }
 
         var ft = new FileTransfer();
@@ -153,6 +161,8 @@ app.controller('MainController', function($rootScope, $scope){
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
     }
+  
+  // END OF IMAGE UPLOADING CODE
   
   //For drop down menu's in the forms
   

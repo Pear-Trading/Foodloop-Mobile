@@ -7,14 +7,14 @@
       This page will in the future tell you your user details, in case you want to review them or decide to change them.
     </p>
 	<p>
-      To display the data below, use the link below to edit user data. Then return to this page and the data will be updated.
+      To display the user data below, use the link below to edit user data. Then return to this page and the data will be updated.
     </p>
-	Name: {{data.name}}<br>
-	Age Range: {{data.age}}<br>
-	Gender: {{data.gender}}<br>
-	Postcode: {{data.postcode}}<br>
-	Family/Individual: {{data.grouping}}<br>
-	Email Address: {{data.email}}<br>
+	<span ng-if="data.name != null">Name: {{data.name}}<br></span>
+	<span ng-if="data.age != null">Age Range: {{data.age}}<br></span>
+	<span ng-if="data.gender != null">Gender: {{data.gender}}<br></span>
+	<span ng-if="data.postcode != null">Postcode: {{data.postcode}}<br></span>
+	<span ng-if="data.grouping != null">Family/Individual: {{data.grouping}}<br></span>
+	<span ng-if="data.email != null">Email Address: {{data.email}}<br></span>
     <p>
       If one wishes to change their data, the link below will bring them to the page that will allow them to edit their account.
     </p>
