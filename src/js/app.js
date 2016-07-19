@@ -28,6 +28,9 @@ app.controller('MainController', function($rootScope, $scope){
   // User agent displayed in home page
   $scope.userAgent = navigator.userAgent;
   
+   // Have they logged in before or first time?
+	$scope.loggedin = false;
+  
   // Needed for the loading screen
   $rootScope.$on('$routeChangeStart', function(){
     $rootScope.loading = true;
@@ -169,9 +172,11 @@ app.controller('MainController', function($rootScope, $scope){
   angular.module('staticSelect', [])
  .controller('ExampleController', ['$scope', function($scope) {
    $scope.data = {
+	name: null,
     age: null,
 	gender: null,
 	grouping: null,
+	password: null,
     multipleSelect: [],
     option1: 'option-1',
    };

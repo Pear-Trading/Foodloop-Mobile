@@ -7,9 +7,13 @@
       This page will in the future tell you your user details, in case you want to review them or decide to change them.
     </p>
 	<p>
-      To display the user data below, use the link below to edit user data. Then return to this page and the data will be updated.
+      <span ng-if="loggedin == true">Below, all your previously entered data is displayed. You may edit some of these fields by pressing the "User Edit" link below.</span>
+    </p>
+	<p>
+      <span ng-if="loggedin == false">To create a new account, click the "User Edit" button below, where your account details will be created.</span>
     </p>
 	<span ng-if="data.name != null">Name: {{data.name}}<br></span>
+	<span ng-if="data.password != null">Password: {{data.password}}<br></span>
 	<span ng-if="data.age != null">Age Range: {{data.age}}<br></span>
 	<span ng-if="data.gender != null">Gender: {{data.gender}}<br></span>
 	<span ng-if="data.postcode != null">Postcode: {{data.postcode}}<br></span>
