@@ -15,6 +15,8 @@ var app = angular.module('FoodLoop', [
   
 });
 
+
+
 app.controller('MainController', function($rootScope, $scope){
   $scope.swiped = function(direction) {
     alert('Swiped ' + direction);
@@ -75,7 +77,9 @@ app.controller('MainController', function($rootScope, $scope){
   angular.module('staticSelect', [])
  .controller('ExampleController', ['$scope', function($scope) {
    $scope.data = {
-    singleSelect: null,
+    singleSelectAge: null,
+	singleSelectGender: null,
+	singleSelectGrouping: null,
     multipleSelect: [],
     option1: 'option-1',
    };
