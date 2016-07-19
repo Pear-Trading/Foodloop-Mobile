@@ -1,12 +1,17 @@
-<form role="form" ng-submit='login()'>
+<form role="form">
     <fieldset>
       <legend>Enter Invitational Token</legend>
         <div class="form-group has-success has-feedback">
           <label>Enter Token</label>
           <input type="text"
+				 name="token"
+				 ng-model="token.value"
                  class="form-control"
-                 placeholder="e.g. BEEPBOOPAPPLE">
+                 placeholder="e.g. apple99">
         </div>
+		<button class="btn btn-primary btn-block" type="submit" ng-click="tokenlogin(token)">
+      Submit
+    </button>
   </form>
  </div>
 </div>

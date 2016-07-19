@@ -1,22 +1,23 @@
-<form role="form" ng-submit='login()'>
+<form role="form" ng-submit='login(data)'>
     <fieldset>
       <legend>User Details</legend>
         <div class="form-group has-success has-feedback">
           <label>Name</label>
           <input type="text"
                  class="form-control"
-                 placeholder="Enter Full Name">
+                 placeholder="Enter Full Name"
+				  ng-model="data.name">
         </div>
 
         <div class="form-group">
-           <label for="singleSelect">Age</label><br>
-    <select name="singleSelectAge" ng-model="data.singleSelectAge">
-      <option value="age10">11-20</option>
-      <option value="age21">21-30</option>
-	  <option value="age31">31-40</option>
-	  <option value="age41">41-50</option>
-	  <option value="age51">51-60</option>
-	  <option value="age61">61-70</option>
+           <label for="singleSelect">Age Range</label><br>
+    <select name="singleSelectAge" ng-model="data.age">
+      <option>11-20</option>
+      <option>21-30</option>
+	  <option>31-40</option>
+	  <option>41-50</option>
+	  <option>51-60</option>
+	  <option>61-70</option>
     </select>
         </div>
 		
@@ -24,16 +25,17 @@
           <label>Email Address</label>
           <input type="email"
                  class="form-control"
-                 placeholder="Enter Full Name">
+                 placeholder="Enter Full Name"
+				  ng-model="data.email">
         </div>
 
         <div class="form-group">
            <label for="singleSelect">Gender</label><br>
-    <select name="singleSelectGender" ng-model="data.singleSelectGender">
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-	  <option value="Other">Other</option>
-	  <option value="None">Prefer Not To Say</option>
+    <select name="singleSelectGender" ng-model="data.gender">
+      <option>Male</option>
+      <option>Female</option>
+	  <option>Other</option>
+	  <option>Prefer Not To Say</option>
     </select>
         </div>
 		
@@ -41,15 +43,16 @@
            <label>Postcode</label>
           <input type="text"
                  class="form-control"
-                 placeholder="Enter Postcode">
+                 placeholder="Enter Postcode"
+				 ng-model="data.postcode">
     </select>
         </div>
 		
 		<div class="form-group">
            <label for="singleSelect">Family/Individual Shopping</label><br>
-    <select name="singleSelectGrouping" ng-model="data.singleSelectGrouping">
-      <option value="male">Family</option>
-      <option value="female">Individual</option>
+    <select name="singleSelectGrouping" ng-model="data.grouping">
+      <option>Family</option>
+      <option>Individual</option>
     </select>
         </div>
 		
@@ -59,10 +62,6 @@
     <button class="btn btn-primary btn-block">
       Login
     </button>
-
-    <div ui-content-for="navbarAction">
-      <a class='btn' ng-click='login()'>Login</a>
-    </div>
 
   </form>
  </div>

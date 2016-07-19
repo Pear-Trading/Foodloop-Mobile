@@ -6,12 +6,13 @@ var app = angular.module('FoodLoop', [
 ])
 
 .config(function($routeProvider) {
-  $routeProvider.when('/', {templateUrl:'home.html',  reloadOnSearch: false});
+  $routeProvider.when('/', {redirectTo:'/receipt',  reloadOnSearch: false});
   $routeProvider.when('/receipt', {templateUrl:'Submit_Receipt.html',  reloadOnSearch: false});
   $routeProvider.when('/account', {templateUrl:'User_Details_Display.html',  reloadOnSearch: false});
   $routeProvider.when('/about', {templateUrl:'About_Description.html',  reloadOnSearch: false});
   $routeProvider.when('/contact', {templateUrl:'Contact_Page.html',  reloadOnSearch: false});
   $routeProvider.when('/accountedit', {templateUrl:'User_Details_Registration_Or_Edit.html',  reloadOnSearch: false});
+  $routeProvider.when('/token', {templateUrl:'Initial_Invite_Token.html',  reloadOnSearch: false});
   
 });
 
@@ -54,8 +55,18 @@ app.controller('MainController', function($rootScope, $scope){
   $scope.rememberMe = true;
   $scope.email = 'me@example.com';
   
-  $scope.login = function() {
-    alert('You submitted the login form');
+  $scope.login = function(data) {
+    alert('You submitted the login form! Check your user information on "User Account".');
+	$scope.data=data;
+  };
+  
+  $scope.tokenlogin = function(token) {
+	if(token.value=='apple99'){
+		alert('You\'ve logged in!');
+	}
+	else{
+		alert('You dun goofed!');
+	}
   };
 
   // 
@@ -148,9 +159,9 @@ app.controller('MainController', function($rootScope, $scope){
   angular.module('staticSelect', [])
  .controller('ExampleController', ['$scope', function($scope) {
    $scope.data = {
-    singleSelectAge: null,
-	singleSelectGender: null,
-	singleSelectGrouping: null,
+    age: null,
+	gender: null,
+	grouping: null,
     multipleSelect: [],
     option1: 'option-1',
    };
