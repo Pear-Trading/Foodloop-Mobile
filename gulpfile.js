@@ -81,7 +81,14 @@ var gulp           = require('gulp'),
     streamqueue    = require('streamqueue'),
     rename         = require('gulp-rename'),
     path           = require('path');
+var jshint         = require('gulp-jshint');
 
+// JS hint task
+gulp.task('jshint', function() {
+  gulp.src('./src/scripts/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
+});
 
 /*================================================
 =            Report Errors to Console            =
