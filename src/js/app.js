@@ -122,7 +122,7 @@ app.controller('MainController', function($rootScope, $scope){
         sourceType: source });
     }
 	
-    function uploadPhoto() {
+    $scope.uploadPhoto = function(receipt) {
 
         //selected photo URI is in the src attribute (we set this on getPhoto)
         var imageURI = document.getElementById('smallImage').getAttribute("src");
@@ -136,14 +136,13 @@ app.controller('MainController', function($rootScope, $scope){
         options.fileKey = "file";
         options.fileName = imageURI.substr(imageURI.lastIndexOf('/')+1);
         options.mimeType = "image/jpeg";
+		options.chunkedMode = false;
 
-        options.params = {
-            firstname: document.getElementById("company").value,
-            lastname: document.getElementById("currency").value,
-        }
+        options.params = receipt;
+		console.log (options.params);
 
         var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI("http://some.server.com/upload.php"), win, fail, options);
+        ft.upload(imageURI, encodeURI("http://192.168.2.168:3000/"), win, fail, options);
     }
 
     // Called if something bad happens.
