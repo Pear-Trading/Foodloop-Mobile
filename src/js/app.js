@@ -2,7 +2,6 @@
 var app = angular.module('FoodLoop', [
   'ngRoute',
   'mobile-angular-ui',
-  'cordovaHTTP',
   'FoodLoop.controllers.Main'
 ])
 
