@@ -220,6 +220,7 @@ gulp.task('js', function() {
       gulp.src(['src/templates/**/*.html']).pipe(templateCache({ module: 'FoodLoop' }))
     )
     .pipe(sourcemaps.init())
+	.pipe(concat('config.js'))
     .pipe(concat('app.js'))
     .pipe(ngAnnotate())
     .pipe(uglify())

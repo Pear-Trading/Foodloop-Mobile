@@ -2,6 +2,7 @@
 var app = angular.module('FoodLoop', [
   'ngRoute',
   'mobile-angular-ui',
+  'cordovaHTTP',
   'FoodLoop.controllers.Main'
 ])
 
@@ -142,7 +143,7 @@ app.controller('MainController', function($rootScope, $scope){
 		console.log (options.params);
 
         var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI("http://192.168.2.168:3000/"), win, fail, options);
+        ft.upload(imageURI, encodeURI(foodloop_upload_url), win, fail, options);
     }
 
     // Called if something bad happens.
