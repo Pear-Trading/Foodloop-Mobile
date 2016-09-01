@@ -29,7 +29,7 @@ var config = {
       prepend: [],
       append: [],
     },
-	
+
     fonts: [
       './bower_components/font-awesome/fonts/fontawesome-webfont.*'
     ]
@@ -148,8 +148,8 @@ gulp.task('livereload', function () {
 =====================================*/
 
 gulp.task('images', function () {
-  return gulp.src('src/img/**/*')
-        .pipe(gulp.dest(path.join(config.dest, 'img')));
+  return gulp.src('src/images/**/*')
+        .pipe(gulp.dest(path.join(config.dest, 'images')));
 });
 
 
@@ -160,26 +160,6 @@ gulp.task('images', function () {
 gulp.task('fonts', function() {
   return gulp.src(config.vendor.fonts)
   .pipe(gulp.dest(path.join(config.dest, 'fonts')));
-});
-
-
-/*==================================
-=            Copy res              =
-==================================*/
-
-gulp.task('res', ['clean'], function () {
-    return gulp.src(['./src/res/**/*'], {
-	}).pipe(gulp.dest(path.join(config.dest, 'res')));
-});
-
-
-/*==================================
-=            Copy spec             =
-==================================*/
-
-gulp.task('spec', ['clean'], function () {
-    return gulp.src(['./src/spec/**/*'], {
-	}).pipe(gulp.dest(path.join(config.dest, 'spec')));
 });
 
 
@@ -284,7 +264,7 @@ gulp.task('weinre', function() {
 ======================================*/
 
 gulp.task('build', function(done) {
-  var tasks = ['html', 'fonts', 'res', 'spec', 'images', 'less', 'js'];
+  var tasks = ['html', 'fonts', 'images', 'less', 'js'];
   seq('clean', tasks, done);
 });
 

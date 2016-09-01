@@ -13,14 +13,15 @@ var app = angular.module('FoodLoop', [
   $routeProvider.when('/account', {templateUrl:'User_Details_Display.html',  reloadOnSearch: false});
   $routeProvider.when('/about', {templateUrl:'About_Description.html',  reloadOnSearch: false});
   $routeProvider.when('/contact', {templateUrl:'Contact_Page.html',  reloadOnSearch: false});
-  $routeProvider.when('/accountedit', {templateUrl:'User_Details_Registration_Or_Edit.html',  reloadOnSearch: false});
+  $routeProvider.when('/accountedit', {templateUrl:'User_Details_Edit.html',  reloadOnSearch: false});
+  $routeProvider.when('/accountregistration', {templateUrl:'User_Details_Registration.html',  reloadOnSearch: false});
   $routeProvider.when('/token', {templateUrl:'Initial_Invite_Token.html',  reloadOnSearch: false});
   
 });
 
 
 
-app.controller('MainController', function($rootScope, $scope){
+app.controller('MainController', function($rootScope, $scope, $http, $window){
   $scope.swiped = function(direction) {
     alert('Swiped ' + direction);
   };
@@ -28,8 +29,8 @@ app.controller('MainController', function($rootScope, $scope){
   // User agent displayed in home page
   $scope.userAgent = navigator.userAgent;
   
-   // Have they logged in before or first time?
-	$scope.loggedin = false;
+  // Have they logged in before or first time?
+  $scope.loggedin = false;
   
   // Needed for the loading screen
   $rootScope.$on('$routeChangeStart', function(){
@@ -54,12 +55,6 @@ app.controller('MainController', function($rootScope, $scope){
 
   $scope.scrollItems = scrollItems;
 
-  //
-  // 'Forms' screen
-  //  
-  $scope.rememberMe = true;
-  $scope.email = 'me@example.com';
-  
   $scope.login = function(data) {
     alert('You submitted the login form! Check your user information on "User Account".');
 	$scope.data=data;
@@ -68,13 +63,86 @@ app.controller('MainController', function($rootScope, $scope){
   // Used when submitting a token
   
   $scope.tokenlogin = function(token) {
-	if(token.value=='apple99'){
-		alert('You\'ve logged in!');
-	}
-	else{
-		alert('You dun goofed!');
-	}
-  };
+		$http.post(foodloop_upload_url, {"token": token.value}).then(
+        function(response) {
+            console.log('STATUS : ' + response.status);
+			console.log(response);
+            console.log('request OK');
+			$scope.username = response.data.token;
+			$window.href = '/User_Details_Registration.html';
+        },
+        function() {
+            console.log('request is NOT OK');
+        });
+	// Creates local file storage
+
+   },
+
+   $scope.errorHandler = function (accountfile, e) {  
+    var msg = '';
+
+    switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+            msg = 'Storage quota exceeded';
+            break;
+        case FileError.NOT_FOUND_ERR:
+            msg = 'File not found';
+            break;
+        case FileError.SECURITY_ERR:
+            msg = 'Security error';
+            break;
+        case FileError.INVALID_MODIFICATION_ERR:
+            msg = 'Invalid modification';
+            break;
+        case FileError.INVALID_STATE_ERR:
+            msg = 'Invalid state';
+            break;
+        default:
+            msg = 'Unknown error';
+            break;
+    };
+
+    console.log('Error (' + accountfile + '): ' + msg);
+}
+   // Create storage write method
+  $scope.writetofile = function(accountfile, data) {
+	  data = JSON.stringify(data, null, '\t');
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
+            directoryEntry.getFile(accountfile, { create: true }, function (fileEntry) {
+                fileEntry.createWriter(function (fileWriter) {
+                    fileWriter.onwriteend = function (e) {
+                        // for real-world usage, you might consider passing a success callback
+                        console.log('Write of file "' + accountfile + '"" completed.');
+                    };
+
+                    fileWriter.onerror = function (e) {
+                        // you could hook this up with our global error handler, or pass in an error callback
+                        console.log('Write failed: ' + e.toString());
+                    };
+
+                    var blob = new Blob([data], { type: 'text/plain' });
+                    fileWriter.write(blob);
+                }, errorHandler.bind(null, accountfile));
+            }, errorHandler.bind(null, accountfile));
+        }, errorHandler.bind(null, accountfile));
+    });
+	
+  $scope.registrationsubmit = function(writetofile) {
+	  writetofile('localaccount.txt', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping});
+	  $http.post(foodloop_upload_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
+        function(response) {
+            console.log('STATUS : ' + response.status);
+			console.log(response);
+            console.log('request OK');
+			$scope.username = response.data.token;
+			$window.href = '/User_Details_Display.html';
+        },
+        function() {
+            console.log('request is NOT OK');
+    });	
+
+
+//    $scope.writetofile('account.json', { foo: 'bar' });
 
   // 
   // 'Drag' screen
@@ -156,12 +224,16 @@ app.controller('MainController', function($rootScope, $scope){
         console.log("Response = " + r.response);
         //alert("Response =" + r.response);
         console.log("Sent = " + r.bytesSent);
+		$scope.uploadsuccess = 'Thank you for submitting your data!';
+		$window.alert(uploadsuccess);
     }
 
     function fail(error) {
         alert("An error has occurred: Code = " + error.code);
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
+		$scope.uploaderror = 'The upload has failed! Are you connected to the internet?';
+		$window.alert(uploaderror);
     }
   
   // END OF IMAGE UPLOADING CODE
@@ -173,6 +245,8 @@ app.controller('MainController', function($rootScope, $scope){
    $scope.data = {
 	name: null,
     age: null,
+	email: null,
+    postcode: null,
 	gender: null,
 	grouping: null,
 	password: null,
