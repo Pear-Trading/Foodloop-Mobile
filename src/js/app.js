@@ -129,10 +129,34 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
                 }, errorHandler.bind(null, accountfile));
             }, errorHandler.bind(null, accountfile));
         }, errorHandler.bind(null, accountfile));
-    });
+    };
 	
+// Create storage read method
+  $scope.readfromfile = function readFromFile(accountfile, cb) {
+        var pathToFile = cordova.file.dataDirectory + accountfile;
+        window.resolveLocalFileSystemURL(pathToFile, function (accountfile) {
+            fileEntry.file(function (file) {
+                var reader = new FileReader();
+
+                reader.onloadend = function (e) {
+                    cb(JSON.parse(this.result));
+                };
+
+                reader.readAsText(file);
+            }, errorHandler.bind(null, accountfile));
+        }, errorHandler.bind(null, accountfile));
+    };
+	
+// Used to check on app open to see if they have logged in before
+  $scope.checkifreturning = function (readfromfile) {
+	  readfromfile('localaccount.json', function ("keyused") {
+		   checkifreturning = "keyused";
+	  }
+  };
+	
+// Called when the user submits their registration details	
   $scope.registrationsubmit = function(writetofile) {
-	  writetofile('localaccount.txt', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping});
+	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
 	  $http.post(foodloop_upload_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
