@@ -68,8 +68,12 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
             console.log('STATUS : ' + response.status);
 			console.log(response);
             console.log('request OK');
-			$scope.username = response.data.token;
-			$window.href = '/User_Details_Registration.html';
+			if (response.data.success) {
+				$scope.username = response.data.token;
+				$window.href = '/User_Details_Registration.html';
+			} else {
+				$window.alert('That key has already been used!');
+			}
         },
         function() {
             console.log('request is NOT OK');
@@ -134,7 +138,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
             console.log('STATUS : ' + response.status);
 			console.log(response);
             console.log('request OK');
-			$scope.username = response.data.token;
+			$window.alert('Thank you for submitting your user info!');
 			$window.href = '/User_Details_Display.html';
         },
         function() {
@@ -224,16 +228,14 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
         console.log("Response = " + r.response);
         //alert("Response =" + r.response);
         console.log("Sent = " + r.bytesSent);
-		$scope.uploadsuccess = 'Thank you for submitting your data!';
-		$window.alert(uploadsuccess);
+		$window.alert('Thank you for submitting your data!');
     }
 
     function fail(error) {
         alert("An error has occurred: Code = " + error.code);
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
-		$scope.uploaderror = 'The upload has failed! Are you connected to the internet?';
-		$window.alert(uploaderror);
+		$window.alert('The upload has failed! Are you connected to the internet?');
     }
   
   // END OF IMAGE UPLOADING CODE
