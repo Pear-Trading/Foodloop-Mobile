@@ -148,11 +148,11 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
     };
 	
 // Used to check on app open to see if they have logged in before
-  $scope.checkifreturning = function (readfromfile) {
-	  readfromfile('localaccount.json', function ("keyused") {
-		   checkifreturning = "keyused";
-	  }
-  };
+//  $scope.checkifreturning = function (readfromfile) {
+//	  readfromfile('localaccount.json', function ("keyused") {
+//		   checkifreturning = "keyused";
+//	  }
+// };
 	
 // Called when the user submits their registration details	
   $scope.registrationsubmit = function(writetofile) {
@@ -167,7 +167,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
         },
         function() {
             console.log('request is NOT OK');
-    });	
+  })}	
 
 // Called when the user edits their user details	
 //  $scope.editsubmit = function(writetofile) {
