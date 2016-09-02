@@ -63,7 +63,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
   // Used when submitting a token
   
   $scope.tokenlogin = function(token) {
-		$http.post(foodloop_upload_url, {"token": token.value}).then(
+		$http.post(foodloop_token_url, {"token": token.value}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
@@ -157,7 +157,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
 // Called when the user submits their registration details	
   $scope.registrationsubmit = function(writetofile) {
 	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
-	  $http.post(foodloop_upload_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
+	  $http.post(foodloop_register_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
