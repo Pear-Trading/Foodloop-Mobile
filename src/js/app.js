@@ -170,19 +170,19 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
   })}	
 
 // Called when the user edits their user details	
-//  $scope.editsubmit = function(writetofile) {
-//	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
-//	  $http.post(foodloop_upload_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
-//        function(response) {
-//            console.log('STATUS : ' + response.status);
-//			console.log(response);
-//            console.log('request OK');
-//			$window.alert('Thank you for submitting your user info!');
-//			$window.href = '/User_Details_Display.html';
-//        },
-//        function() {
-//            console.log('request is NOT OK');
-//    });	
+  $scope.editsubmit = function(writetofile) {
+	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender});
+	  $http.post(foodloop_edit_url, {"name": data.name, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender}).then(
+        function(response) {
+            console.log('STATUS : ' + response.status);
+			console.log(response);
+            console.log('request OK');
+			$window.alert('Thank you for submitting your user info!');
+			$window.href = '/User_Details_Display.html';
+        },
+        function() {
+            console.log('request is NOT OK');
+    });	
 
 //    $scope.writetofile('account.json', { foo: 'bar' });
 

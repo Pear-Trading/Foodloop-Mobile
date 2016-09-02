@@ -11,7 +11,7 @@
 		
         <div class="form-group has-success has-feedback">
 			<label>Name</label>
-			<input type="text" class="form-control" placeholder="e.g. Joe Bloggs" ng-model="data.name">
+			<input type="text" class="form-control" placeholder={{data.name}} ng-model="data.name">
         </div>
 
         <div class="form-group">
@@ -43,7 +43,7 @@
 		
 		<div class="form-group">
 			<label>Postcode</label>
-			<input type="text"  class="form-control"  placeholder="e.g. LA1 9ZZ" ng-model="data.postcode">
+			<input type="text"  class="form-control"  placeholder={{data.postcode}} ng-model="data.postcode">
 		</div>
 		
 		<div class="form-group">
@@ -53,13 +53,13 @@
 		
 		<div class="form-group">
 			<label>New Password</label>
-			<span>You must contact the app developer if you wish to change your password. Their details are contained within the <a href="#/contact">Contact Page here.</a></span>
+			<span>You must contact the app developer if you wish to change your password or other uneditable fields. Their details are contained within the <a href="#/contact">Contact Page here.</a></span>
         </div>
 		
 	</fieldset>
     <hr>
 
-	<button class="btn btn-primary btn-block">
+	<button class="btn btn-primary btn-block" type="submit" ng-click="editsubmit(writetofile)">
 		Login
 	</button>
 
