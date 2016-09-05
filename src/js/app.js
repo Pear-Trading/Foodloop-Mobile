@@ -77,7 +77,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
 				console.log(response);
 				console.log('request OK');
 				if (response.data.success) {
-					$scope.username = response.data.token;
+					$scope.username = response.data.username;
 					$window.href = '/User_Details_Registration.html';
 				} else {
 					$window.alert('That key has already been used!');
@@ -155,7 +155,11 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
             console.log('request OK');
-			$window.alert('Thank you for submitting your user info!');
+			if (response.data.success) {
+				$window.alert('Thank you for submitting your user info!');
+			} else {
+					$window.alert('The submission has failed! Are your connected to the internet?');
+			}
 			$window.href = '/User_Details_Display.html';
         },
         function() {
@@ -172,7 +176,11 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
             console.log('request OK');
-			$window.alert('Thank you for submitting your user info!');
+			if (response.data.success) {
+				$window.alert('User details have been edited!');
+			} else {
+					$window.alert('The editing has failed! Are you connected to the internet?');
+			}
 			$window.href = '/User_Details_Display.html';
         },
         function() {
@@ -263,7 +271,11 @@ $scope.errorHandler = function (accountfile, e) {
         console.log("Response = " + r.response);
         //alert("Response =" + r.response);
         console.log("Sent = " + r.bytesSent);
-		$window.alert('Thank you for submitting your data!');
+		if (r.data.success) {
+				$window.alert('Thank you for submitting your data!');
+			} else {
+					$window.alert('The upload has failed! Did you send a jpeg format picture?');
+			}
     };
 
     function fail(error) {
