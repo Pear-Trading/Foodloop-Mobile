@@ -1,14 +1,12 @@
-<script>
-angular.module('LoadUsername', [])
- $scope.$watch('$viewContentLoaded', function(){
-    // get username from entered key and load it in
-	
- });
-</script>
 <div class="scrollable">
  <div class="scrollable-content section"> 
 <form role="form">
     <fieldset>
+	  <div class="form-group">
+			<label>Username</label>
+			<input type="text"  class="form-control"  placeholder={{username}} readonly="readonly" ng-model="receipt.username">
+		</div>
+	
       <legend>New Receipt</legend>
         <div class="form-group has-success has-feedback">
           <label>Store Name</label>

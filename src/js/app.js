@@ -3,12 +3,19 @@ var app = angular.module('FoodLoop', [
   'ngRoute',
   'mobile-angular-ui',
   'FoodLoop.controllers.Main'
-])
+]);
 
 // Links to the pages
 
-.config(function($routeProvider) {
-  $routeProvider.when('/', {redirectTo:'/receipt',  reloadOnSearch: false});
+app.config(function($routeProvider) {
+  $routeProvider.when('/', {redirectTo: readFromFile('localacccount.json', function (data) {
+				if (data.keyused = true) {
+					return '/receipt';
+				} else {
+					return '/accountregistration';
+				}
+			})
+  ,  reloadOnSearch: false});
   $routeProvider.when('/receipt', {templateUrl:'Submit_Receipt.html',  reloadOnSearch: false});
   $routeProvider.when('/account', {templateUrl:'User_Details_Display.html',  reloadOnSearch: false});
   $routeProvider.when('/about', {templateUrl:'About_Description.html',  reloadOnSearch: false});
@@ -16,10 +23,7 @@ var app = angular.module('FoodLoop', [
   $routeProvider.when('/accountedit', {templateUrl:'User_Details_Edit.html',  reloadOnSearch: false});
   $routeProvider.when('/accountregistration', {templateUrl:'User_Details_Registration.html',  reloadOnSearch: false});
   $routeProvider.when('/token', {templateUrl:'Initial_Invite_Token.html',  reloadOnSearch: false});
-  
 });
-
-
 
 app.controller('MainController', function($rootScope, $scope, $http, $window){
   $scope.swiped = function(direction) {
@@ -37,12 +41,16 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
     $rootScope.loading = true;
   });
 
+  // Do they need to register?
+ /*  $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
+    if ($scope.loggedIn == false && newValue != '/login'){  
+            $location.path('/login');  
+    }  
+  }); */
+
   $rootScope.$on('$routeChangeSuccess', function(){
     $rootScope.loading = false;
   });
-
-  // Fake text i used here and there.
-  $scope.lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel explicabo, aliquid eaque soluta nihil eligendi adipisci error, illum corrupti nam fuga omnis quod quaerat mollitia expedita impedit dolores ipsam. Obcaecati.';
 
   // 
   // 'Scroll' screen
@@ -64,25 +72,26 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
   
   $scope.tokenlogin = function(token) {
 		$http.post(foodloop_token_url, {"token": token.value}).then(
-        function(response) {
-            console.log('STATUS : ' + response.status);
-			console.log(response);
-            console.log('request OK');
-			if (response.data.success) {
-				$scope.username = response.data.token;
-				$window.href = '/User_Details_Registration.html';
-			} else {
-				$window.alert('That key has already been used!');
+			function(response) {
+				console.log('STATUS : ' + response.status);
+				console.log(response);
+				console.log('request OK');
+				if (response.data.success) {
+					$scope.username = response.data.token;
+					$window.href = '/User_Details_Registration.html';
+				} else {
+					$window.alert('That key has already been used!');
+				}
+			},
+			function() {
+				console.log('request is NOT OK');
 			}
-        },
-        function() {
-            console.log('request is NOT OK');
-        });
+		);
 	// Creates local file storage
 
    },
 
-   $scope.errorHandler = function (accountfile, e) {  
+$scope.errorHandler = function (accountfile, e) {  
     var msg = '';
 
     switch (e.code) {
@@ -107,7 +116,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
     };
 
     console.log('Error (' + accountfile + '): ' + msg);
-}
+};
    // Create storage write method
   $scope.writetofile = function(accountfile, data) {
 	  data = JSON.stringify(data, null, '\t');
@@ -127,22 +136,6 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
                     var blob = new Blob([data], { type: 'text/plain' });
                     fileWriter.write(blob);
                 }, errorHandler.bind(null, accountfile));
-            }, errorHandler.bind(null, accountfile));
-        }, errorHandler.bind(null, accountfile));
-    };
-	
-// Create storage read method
-  $scope.readfromfile = function readFromFile(accountfile, cb) {
-        var pathToFile = cordova.file.dataDirectory + accountfile;
-        window.resolveLocalFileSystemURL(pathToFile, function (accountfile) {
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-
-                reader.onloadend = function (e) {
-                    cb(JSON.parse(this.result));
-                };
-
-                reader.readAsText(file);
             }, errorHandler.bind(null, accountfile));
         }, errorHandler.bind(null, accountfile));
     };
@@ -167,7 +160,9 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
         },
         function() {
             console.log('request is NOT OK');
-  })}	
+		}
+		);
+  };
 
 // Called when the user edits their user details	
   $scope.editsubmit = function(writetofile) {
@@ -182,7 +177,9 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
         },
         function() {
             console.log('request is NOT OK');
-    });	
+		}
+		);
+    };
 
 //    $scope.writetofile('account.json', { foo: 'bar' });
 
@@ -253,13 +250,13 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
 
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI(foodloop_upload_url), win, fail, options);
-    }
+    };
 
     // Called if something bad happens.
     //
     function onFail(message) {
       console.log('Failed because: ' + message);
-    }
+    };
 
     function win(r) {
         console.log("Code = " + r.responseCode);
@@ -267,21 +264,21 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
         //alert("Response =" + r.response);
         console.log("Sent = " + r.bytesSent);
 		$window.alert('Thank you for submitting your data!');
-    }
+    };
 
     function fail(error) {
         alert("An error has occurred: Code = " + error.code);
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
 		$window.alert('The upload has failed! Are you connected to the internet?');
-    }
+    };
   
   // END OF IMAGE UPLOADING CODE
   
   //For drop down menu's in the forms
-  
-  angular.module('staticSelect', [])
- .controller('ExampleController', ['$scope', function($scope) {
+});
+
+ app.controller('ExampleController', function($scope) {
    $scope.data = {
 	name: null,
     age: null,
@@ -297,7 +294,6 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
    $scope.forceUnknownOption = function() {
      $scope.data.singleSelect = 'nonsense';
    };
-}]);
   
   for (var j = 0; j < 10; j++) {
     $scope.notices.push({icon: 'envelope', message: 'Notice ' + (j + 1) });
@@ -309,4 +305,19 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
       $scope.notices.splice(index, 1);
     }
   };
-});
+ });
+
+function readFromFile(accountfile, cb) {
+	var pathToFile = cordova.file.dataDirectory + accountfile;
+	window.resolveLocalFileSystemURL(pathToFile, function (accountfile) {
+		fileEntry.file(function (file) {
+			var reader = new FileReader();
+
+			reader.onloadend = function (e) {
+				cb(JSON.parse(this.result));
+			};
+
+			reader.readAsText(file);
+		}, errorHandler.bind(null, accountfile));
+	}, errorHandler.bind(null, accountfile));
+};
