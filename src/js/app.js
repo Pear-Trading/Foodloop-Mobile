@@ -8,14 +8,7 @@ var app = angular.module('FoodLoop', [
 // Links to the pages
 
 app.config(function($routeProvider) {
-  $routeProvider.when('/', {redirectTo: readFromFile('localacccount.json', function (data) {
-				if (data.keyused = true) {
-					return '/receipt';
-				} else {
-					return '/accountregistration';
-				}
-			})
-  ,  reloadOnSearch: false});
+  $routeProvider.when('/', {redirectTo: '/token', reloadOnSearch: false});
   $routeProvider.when('/receipt', {templateUrl:'Submit_Receipt.html',  reloadOnSearch: false});
   $routeProvider.when('/account', {templateUrl:'User_Details_Display.html',  reloadOnSearch: false});
   $routeProvider.when('/about', {templateUrl:'About_Description.html',  reloadOnSearch: false});
@@ -37,9 +30,17 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
   $scope.loggedin = false;
   
   // Needed for the loading screen
-  $rootScope.$on('$routeChangeStart', function(){
-    $rootScope.loading = true;
-  });
+	$rootScope.$on('$routeChangeStart', function(){
+		readFromFile('localacccount.json', function (data) {
+			console.log(data);
+				if (data.keyused == true) {
+					$location.path('/receipt');
+				} else {
+					$location.path('/token');
+				}
+		});
+		$rootScope.loading = true;
+	});
 
   // Do they need to register?
  /*  $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
@@ -319,9 +320,34 @@ $scope.errorHandler = function (accountfile, e) {
   };
  });
 
+ function errorHandler(accountfile, e) {  
+    var msg = '';
+
+    switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+            msg = 'Storage quota exceeded';
+            break;
+        case FileError.NOT_FOUND_ERR:
+            msg = 'File not found';
+            break;
+        case FileError.SECURITY_ERR:
+            msg = 'Security error';
+            break;
+        case FileError.INVALID_MODIFICATION_ERR:
+            msg = 'Invalid modification';
+            break;
+        case FileError.INVALID_STATE_ERR:
+            msg = 'Invalid state';
+            break;
+        default:
+            msg = 'Unknown error';
+            break;
+    };
+ }
+ 
 function readFromFile(accountfile, cb) {
 	var pathToFile = cordova.file.dataDirectory + accountfile;
-	window.resolveLocalFileSystemURL(pathToFile, function (accountfile) {
+	window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
 		fileEntry.file(function (file) {
 			var reader = new FileReader();
 
@@ -333,3 +359,7 @@ function readFromFile(accountfile, cb) {
 		}, errorHandler.bind(null, accountfile));
 	}, errorHandler.bind(null, accountfile));
 };
+
+document.addEventListener("deviceready", function() {
+    angular.bootstrap(document.body, ["FoodLoop"]);
+}, false);
