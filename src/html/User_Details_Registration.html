@@ -4,12 +4,11 @@
 	<fieldset>
 		<legend>User Details</legend>
         <div class="form-group has-success has-feedback">
-		
-		<div class="form-group">
-			<label>Username</label>
+		<label>Username</label>
 			<input type="text"  class="form-control"  placeholder={{username}} readonly="readonly">
 		</div>
 		
+		<div class="form-group">
 			<label>Name</label>
 			<input type="text" class="form-control" placeholder="e.g. Joe Bloggs" ng-model="data.name">
         </div>
@@ -63,7 +62,7 @@
 	</fieldset>
     <hr>
 
-	<button class="btn btn-primary btn-block" type="submit" ng-click="registrationsubmit(writetofile)">
+	<button class="btn btn-primary btn-block" type="submit" ng-click="registrationsubmit(data)">
 		Login
 	</button>
 

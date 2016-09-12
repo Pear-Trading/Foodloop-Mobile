@@ -18,7 +18,7 @@ app.config(function($routeProvider) {
   $routeProvider.when('/token', {templateUrl:'Initial_Invite_Token.html',  reloadOnSearch: false});
 });
 
-app.controller('MainController', function($rootScope, $scope, $http, $window){
+app.controller('MainController', function($rootScope, $scope, $http, $window, $location){
   $scope.swiped = function(direction) {
     alert('Swiped ' + direction);
   };
@@ -64,10 +64,10 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
 
   $scope.scrollItems = scrollItems;
 
-  $scope.login = function(data) {
-    alert('You submitted the login form! Check your user information on "User Account".');
-	$scope.data=data;
-  };
+  // $scope.login = function(data) {
+    // alert('You submitted the login form! Check your user information on "User Account".');
+	// $scope.data=data;
+  // };
   
   // Used when submitting a token
   
@@ -79,9 +79,9 @@ app.controller('MainController', function($rootScope, $scope, $http, $window){
 				console.log('request OK');
 				if (response.data.success) {
 					$scope.username = response.data.username;
-					$window.href = '/User_Details_Registration.html';
+					$location.path('/accountregistration');
 				} else {
-					$window.alert('That key has already been used!');
+					$window.alert('That key is invalid or has been used!');
 				}
 			},
 			function() {
@@ -149,8 +149,8 @@ $scope.errorHandler = function (accountfile, e) {
 // };
 	
 // Called when the user submits their registration details	
-  $scope.registrationsubmit = function(writetofile) {
-	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
+  $scope.registrationsubmit = function(data) {
+	  $scope.writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
 	  $http.post(foodloop_register_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
@@ -158,10 +158,10 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('request OK');
 			if (response.data.success) {
 				$window.alert('Thank you for submitting your user info!');
+				$location.path('/User_Details_Display.html');
 			} else {
 					$window.alert('The submission has failed! Are your connected to the internet?');
 			}
-			$window.href = '/User_Details_Display.html';
         },
         function() {
             console.log('request is NOT OK');
@@ -179,10 +179,10 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('request OK');
 			if (response.data.success) {
 				$window.alert('User details have been edited!');
+				$location.path('/User_Details_Display.html');
 			} else {
 					$window.alert('The editing has failed! Are you connected to the internet?');
 			}
-			$window.href = '/User_Details_Display.html';
         },
         function() {
             console.log('request is NOT OK');
