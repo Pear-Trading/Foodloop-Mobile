@@ -91,7 +91,7 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
 	// Creates local file storage
 
    },
-
+   
 $scope.errorHandler = function (accountfile, e) {  
     var msg = '';
 
@@ -150,8 +150,8 @@ $scope.errorHandler = function (accountfile, e) {
 	
 // Called when the user submits their registration details	
   $scope.registrationsubmit = function(data) {
-	  $scope.writetofile('localaccount.json', {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
-	  $http.post(foodloop_register_url, {"name": data.name, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
+	  $scope.writetofile('localaccount.json', {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
+	  $http.post(foodloop_register_url, {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
@@ -171,8 +171,8 @@ $scope.errorHandler = function (accountfile, e) {
 
 // Called when the user edits their user details	
   $scope.editsubmit = function(writetofile) {
-	  writetofile('localaccount.json', {"name": data.name, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender});
-	  $http.post(foodloop_edit_url, {"name": data.name, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender}).then(
+	  writetofile('localaccount.json', {"fullname": data.fullname, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender});
+	  $http.post(foodloop_edit_url, {"fullname": data.fullname, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
 			console.log(response);
@@ -293,7 +293,7 @@ $scope.errorHandler = function (accountfile, e) {
 
  app.controller('ExampleController', function($scope) {
    $scope.data = {
-	name: null,
+	fullname: null,
     age: null,
 	email: null,
     postcode: null,

@@ -5,12 +5,12 @@
 		<legend>User Details</legend>
         <div class="form-group has-success has-feedback">
 		<label>Username</label>
-			<input type="text"  class="form-control"  placeholder={{username}} readonly="readonly" ng-model="data.username">
+			<input type="text"  class="form-control" readonly="readonly" ng-model="data.username" ng-init="data.username=username">
 		</div>
 		
 		<div class="form-group">
 			<label>Name</label>
-			<input type="text" class="form-control" placeholder="e.g. Joe Bloggs" ng-model="data.name">
+			<input type="text" class="form-control" placeholder="e.g. Joe Bloggs" ng-model="data.fullname">
         </div>
 
         <div class="form-group">
