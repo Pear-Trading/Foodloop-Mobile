@@ -6,7 +6,7 @@
 		
 		<div class="form-group">
 			<label>Username</label>
-			<input type="text"  class="form-control"  placeholder={{username}} readonly="readonly">
+			<input type="text"  class="form-control" readonly="readonly" ng-model="data.username" ng-init="data.username=username">
 		</div>
 		
         <div class="form-group has-success has-feedback">
@@ -28,7 +28,7 @@
 		
 		 <div class="form-group">
 			<label>Email</label>
-			<input type="text"  class="form-control"  placeholder={{data.email}} readonly="readonly">
+			<input type="text"  class="form-control" readonly="readonly" ng-model="data.email" ng-init="data.email=email">
 		</div>
 
 		<div class="form-group">
@@ -48,7 +48,7 @@
 		
 		<div class="form-group">
 			<label>Family/Individual Shopping</label>
-			<input type="text"  class="form-control"  placeholder={{data.grouping}} readonly="readonly">
+			<input type="text"  class="form-control" readonly="readonly" ng-model="data.grouping" ng-init="data.grouping=grouping">
 		</div>
 		
 		<div class="form-group">

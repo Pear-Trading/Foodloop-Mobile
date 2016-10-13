@@ -35,8 +35,10 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
 			console.log(data);
 				if (data.keyused == true) {
 					$location.path('/receipt');
+					console.log('This user should be here for first time!')
 				} else {
 					$location.path('/token');
+					console.log('This user should have already registered!')
 				}
 		});
 		$rootScope.loading = true;
@@ -49,6 +51,19 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
     }  
   }); */
 
+  $scope.testread = function() {
+		readFromFile('localacccount.json', function (data) {
+			console.log(data);
+				if (data.keyused == true) {
+					$location.path('/receipt');
+					console.log('This user should be here for first time!')
+				} else {
+					$location.path('/token');
+					console.log('This user should have already registered!')
+				}
+		});
+	};
+  
   $rootScope.$on('$routeChangeSuccess', function(){
     $rootScope.loading = false;
   });
@@ -118,7 +133,7 @@ $scope.errorHandler = function (accountfile, e) {
 
     console.log('Error (' + accountfile + '): ' + msg);
 };
-   // Create storage write method
+/*    // Create storage write method
   $scope.writetofile = function(accountfile, data) {
 	  data = JSON.stringify(data, null, '\t');
         window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
@@ -126,7 +141,7 @@ $scope.errorHandler = function (accountfile, e) {
                 fileEntry.createWriter(function (fileWriter) {
                     fileWriter.onwriteend = function (e) {
                         // for real-world usage, you might consider passing a success callback
-                        console.log('Write of file "' + accountfile + '"" completed.');
+                        console.log('Write of file "' + accountfile + '" completed.');
                     };
 
                     fileWriter.onerror = function (e) {
@@ -140,7 +155,22 @@ $scope.errorHandler = function (accountfile, e) {
             }, errorHandler.bind(null, accountfile));
         }, errorHandler.bind(null, accountfile));
     };
-	
+ */
+	// Create storage read method
+  /* $scope.readFromFile = function(accountfile, cb) {
+	var pathToFile = cordova.file.dataDirectory + accountfile;
+	window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
+		fileEntry.file(function (file) {
+			var reader = new FileReader();
+
+			reader.onloadend = function (e) {
+				cb(JSON.parse(this.result));
+			};
+
+			reader.readAsText(file);
+		}, errorHandler.bind(null, accountfile));
+	}, errorHandler.bind(null, accountfile));
+}; */
 // Used to check on app open to see if they have logged in before
 //  $scope.checkifreturning = function (readfromfile) {
 //	  readfromfile('localaccount.json', function ("keyused") {
@@ -150,7 +180,7 @@ $scope.errorHandler = function (accountfile, e) {
 	
 // Called when the user submits their registration details	
   $scope.registrationsubmit = function(data) {
-	  $scope.writetofile('localaccount.json', {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
+	  writeToFile('localaccount.json', {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
 	  $http.post(foodloop_register_url, {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "password": data.password}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
@@ -158,7 +188,7 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('request OK');
 			if (response.data.success) {
 				$window.alert('Thank you for submitting your user info!');
-				$location.path('/User_Details_Display.html');
+				$location.path('/account');
 			} else {
 					$window.alert('The submission has failed! Are your connected to the internet?');
 			}
@@ -170,8 +200,8 @@ $scope.errorHandler = function (accountfile, e) {
   };
 
 // Called when the user edits their user details	
-  $scope.editsubmit = function(writetofile) {
-	  writetofile('localaccount.json', {"fullname": data.fullname, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender});
+  $scope.editsubmit = function(data) {
+	  writeToFile('localaccount.json', {"fullname": data.fullname, "username": data.username, "email": data.email, "postcode": data.postcode, "age": data.age, "gender": data.gender, "grouping": data.grouping, "keyused": "true"});
 	  $http.post(foodloop_edit_url, {"fullname": data.fullname, "username": data.username, "postcode": data.postcode, "age": data.age, "gender": data.gender}).then(
         function(response) {
             console.log('STATUS : ' + response.status);
@@ -179,7 +209,7 @@ $scope.errorHandler = function (accountfile, e) {
             console.log('request OK');
 			if (response.data.success) {
 				$window.alert('User details have been edited!');
-				$location.path('/User_Details_Display.html');
+				$location.path('/account');
 			} else {
 					$window.alert('The editing has failed! Are you connected to the internet?');
 			}
@@ -345,6 +375,29 @@ $scope.errorHandler = function (accountfile, e) {
     };
  }
  
+ 
+function writeToFile(accountfile, data) {
+	data = JSON.stringify(data, null, '\t');
+	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
+		directoryEntry.getFile(accountfile, { create: true }, function (fileEntry) {
+			fileEntry.createWriter(function (fileWriter) {
+				fileWriter.onwriteend = function (e) {
+					// for real-world usage, you might consider passing a success callback
+					console.log('Write of file "' + accountfile + '" completed.');
+				};
+
+				fileWriter.onerror = function (e) {
+					// you could hook this up with our global error handler, or pass in an error callback
+					console.log('Write failed: ' + e.toString());
+				};
+
+				var blob = new Blob([data], { type: 'text/plain' });
+				fileWriter.write(blob);
+			}, errorHandler.bind(null, accountfile));
+		}, errorHandler.bind(null, accountfile));
+	}, errorHandler.bind(null, accountfile));
+};
+	
 function readFromFile(accountfile, cb) {
 	var pathToFile = cordova.file.dataDirectory + accountfile;
 	window.resolveLocalFileSystemURL(pathToFile, function (fileEntry) {
