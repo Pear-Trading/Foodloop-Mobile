@@ -1,8 +1,9 @@
 "use strict";
 var app = angular.module('FoodLoop', [
+ // 'fSCordova',
   'ngRoute',
   'mobile-angular-ui',
-  'FoodLoop.controllers.Main'
+  'FoodLoop.controllers.Main',
 ]);
 
 // Links to the pages
@@ -31,16 +32,16 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
   
   // Needed for the loading screen
 	$rootScope.$on('$routeChangeStart', function(){
-		readFromFile('localacccount.json', function (data) {
-			console.log(data);
-				if (data.keyused == true) {
-					$location.path('/receipt');
-					console.log('This user should be here for first time!')
-				} else {
-					$location.path('/token');
-					console.log('This user should have already registered!')
-				}
-		});
+			readFromFile('localacccount.json', function (data) {
+				console.log(data);
+					if (data.keyused == true) {
+						$location.path('/receipt');
+						console.log('This user should be here for first time!')
+					} else {
+						$location.path('/token');
+						console.log('This user should have already registered!')
+					}
+			});
 		$rootScope.loading = true;
 	});
 
@@ -413,6 +414,7 @@ function readFromFile(accountfile, cb) {
 	}, errorHandler.bind(null, accountfile));
 };
 
-document.addEventListener("deviceready", function() {
+/* document.addEventListener("deviceready", function() {
     angular.bootstrap(document.body, ["FoodLoop"]);
-}, false);
+}, false); */
+
