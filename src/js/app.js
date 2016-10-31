@@ -30,17 +30,30 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
   // Have they logged in before or first time?
   $scope.loggedin = false;
   
-  // Needed for the loading screen
-	$rootScope.$on('$routeChangeStart', function(){
-		var nameofFile = "localaccount.json";
+  $rootScope.init = function() {
+	    var nameofFile = "localaccount.json";
 		var store = cordova.file.dataDirectory;
 			window.resolveLocalFileSystemURL(store + nameofFile, function (existingusermove) {
 				$location.path('/receipt');
-						console.log('This user should have already registered!');
+				console.log('This user should have already registered!');
 			}, function (newusermove) {
 				$location.path('/token');
 				console.log('This user should be here for first time!');
 			});
+  }
+  
+  // Needed for the loading screen
+	$rootScope.$on('$routeChangeStart', function(){
+		/* var nameofFile = "localaccount.json";
+		var store = cordova.file.dataDirectory;
+			window.resolveLocalFileSystemURL(store + nameofFile, function (existingusermove) {
+				$location.path('/receipt');
+				console.log('This user should have already registered!');
+			}, function (newusermove) {
+				$location.path('/token');
+				console.log('This user should be here for first time!');
+			}); */
+			
 			/* readFromFile('localacccount.json', function (data) {
 				console.log(data);
 					if (data.keyused == true) {
@@ -64,13 +77,6 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
   $scope.testread = function() {
 		readFromFile('localacccount.json', function (data) {
 			console.log(data);
-				if (data.keyused == true) {
-					$location.path('/receipt');
-					console.log('This user should be here for first time!')
-				} else {
-					$location.path('/token');
-					console.log('This user should have already registered!')
-					
 					$http.post(foodloop_fetch_url, {"username": data.username}).then(
 						function(response) {
 							console.log('STATUS : ' + response.status);
@@ -442,4 +448,3 @@ function readFromFile(accountfile, cb) {
 /* document.addEventListener("deviceready", function() {
     angular.bootstrap(document.body, ["FoodLoop"]);
 }, false); */
-
