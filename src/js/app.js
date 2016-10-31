@@ -32,16 +32,25 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
   
   // Needed for the loading screen
 	$rootScope.$on('$routeChangeStart', function(){
-			readFromFile('localacccount.json', function (data) {
+		var nameofFile = "localaccount.json";
+		var store = cordova.file.dataDirectory;
+			window.resolveLocalFileSystemURL(store + nameofFile, function (existingusermove) {
+				$location.path('/receipt');
+						console.log('This user should have already registered!');
+			}, function (newusermove) {
+				$location.path('/token');
+				console.log('This user should be here for first time!');
+			});
+			/* readFromFile('localacccount.json', function (data) {
 				console.log(data);
 					if (data.keyused == true) {
 						$location.path('/receipt');
-						console.log('This user should be here for first time!')
+						console.log('This user should have already registered!');
 					} else {
 						$location.path('/token');
-						console.log('This user should have already registered!')
+						console.log('This user should be here for first time!');
 					}
-			});
+			}); */
 		$rootScope.loading = true;
 	});
 
@@ -61,6 +70,22 @@ app.controller('MainController', function($rootScope, $scope, $http, $window, $l
 				} else {
 					$location.path('/token');
 					console.log('This user should have already registered!')
+					
+					$http.post(foodloop_fetch_url, {"username": data.username}).then(
+						function(response) {
+							console.log('STATUS : ' + response.status);
+							console.log(response);
+							console.log('request OK');
+						if (response.data.success) {
+							$scope.username = response.data.username;
+						} else {
+							$window.alert('The user data could not be loaded on the server!');
+						}
+					},
+						function() {
+							console.log('request is NOT OK');
+						}
+					);
 				}
 		});
 	};
